@@ -2,6 +2,7 @@
 * references
    * http://www.baeldung.com/java-weakhashmap
    * https://en.wikipedia.org/wiki/Lapsed_listener_problem
+   * https://chatgpt.com/
 
 The main goal of this project is to give simple example of Phantom References
 in java.
@@ -21,6 +22,12 @@ in java.
       ```
    * `WeakHashMap` uses weak keys
       * key no longer strongly referenced => entry is automatically removed by the GC
+   * Lapsed Listener Problem
+      * leak: publisher holds a strong reference to the listener
+         * nothing else references the listener => the GC cannot collect it
+            * listener is “logically dead” but remains “physically alive” — hence “lapsed"
+      * solution: avoid holding strong references to listeners
+         * use `WeakReference`
 1. **Phantom Reference** - phantom reference objects are enqueued after the collector determines that their referents may otherwise be reclaimed.
    * example
       ```
