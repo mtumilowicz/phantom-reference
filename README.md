@@ -1,28 +1,36 @@
 # phantom-reference
+* references
+   * http://www.baeldung.com/java-weakhashmap
+   * https://en.wikipedia.org/wiki/Lapsed_listener_problem
+
 The main goal of this project is to give simple example of Phantom References
 in java.
 
 # reference types
 1. **Strong Reference** - any object with an active strong reference to it, will never be garbage collected.
 1. **Soft Reference** - the garbage collector may optionally choose to reclaim the memory occupied by the employee object.
-   ```
-   SoftReference<X> ex = new SoftReference<>(x);
-   ```
-   _Remark_: Garbage collector will always reclaim the memory of objects that have only soft references pointing to them before it throws an `OutOfMemory Error`.
+   * example
+      ```
+      SoftReference<X> ex = new SoftReference<>(x);
+      ```
+   * Garbage collector will always reclaim the memory of objects that have only soft references pointing to them before it throws an `OutOfMemory Error`.
 1. **Weak Reference** - an object that only has a week reference is eligible for garbage collection.
-   ```
-   WeakReference<X> ex = new WeakReference<>(x);
-   ```
-   _Remark_: [WeakHashMap](http://www.baeldung.com/java-weakhashmap)  
-   _Remark_: [Lapsed listener problem](https://en.wikipedia.org/wiki/Lapsed_listener_problem)
+   * example
+      ```
+      WeakReference<X> ex = new WeakReference<>(x);
+      ```
+   * `WeakHashMap` uses weak keys
+      * key no longer strongly referenced => entry is automatically removed by the GC
 1. **Phantom Reference** - phantom reference objects are enqueued after the collector determines that their referents may otherwise be reclaimed.
-   ```
-   final ReferenceQueue<X> queue = new ReferenceQueue<>();
-   PhantomReference<X> ex = new PhantomReference<>(x, queue);
-   ```
-
-   _Remark_: It is used to determine when an object was removed from the memory which helps to schedule memory-sensitive tasks. For example, we can wait for a large object to be removed (reference will appear on the queue) before loading another one.  
-   _Remark_: Calling a `get()` on the Phantom reference always returns `null`.
+   * example
+      ```
+      final ReferenceQueue<X> queue = new ReferenceQueue<>();
+      PhantomReference<X> ex = new PhantomReference<>(x, queue);
+      ```
+   * used to determine when an object was removed from the memory which helps to schedule memory-sensitive tasks
+      * example: we can wait for a large object to be removed (reference will appear on the queue) before loading another one.  
+   * Calling a `get()` on the Phantom reference always returns `null`.
+      * used not to access the object, but to know exactly when the object is being finalized
 
 # description
 Take a look at comments in `Main`:
